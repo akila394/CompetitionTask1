@@ -90,39 +90,50 @@ namespace MarsFramework.Pages
             ManageListingBtn.Click();
             Thread.Sleep(2000);
 
-            IList <IWebElement> RowElements = RecordDetails.FindElements(By.TagName("tr"));
+            IList<IWebElement> RowElements = RecordDetails.FindElements(By.TagName("tr"));
+            int records = RowElements.Count;
             //Delete a Record
-            foreach(IWebElement row in RowElements)
+            foreach (IWebElement row in RowElements)
             {
                 IList<IWebElement> col = row.FindElements(By.TagName("td"));
-                if(col[2].Text.Equals(Global.GlobalDefinitions.ExcelLib.ReadData(2, "Delete record")))
+                if (col[2].Text.Equals(Global.GlobalDefinitions.ExcelLib.ReadData(2, "Delete record")))
                 {
                     RemoveIcon.Click();
                     Thread.Sleep(5000);
                     DeleteConfirmbtn.Click();
                     Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Service deleted");
+                    //records = records - 1;
                 }
             }
 
             //Check Deleted Listing is still present in the Manage Listing
-            foreach (IWebElement row in RowElements)
+            if (records >= 1)
             {
-                IList<IWebElement> col = row.FindElements(By.TagName("td"));
-                if (col[3].Text.Equals(GlobalDefinitions.ExcelLib.ReadData(2, "Title")))
-                {
 
-                    Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Deleted record still in the Manage Listings");
-                    break;
+                foreach (IWebElement row in RowElements)
+                {
+                    IList<IWebElement> col = row.FindElements(By.TagName("td"));
+                    if (col[3].Text.Equals(GlobalDefinitions.ExcelLib.ReadData(2, "Title")))
+                    {
+
+                        Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Deleted record still in the Manage Listings");
+                        
+
+                    }
+
+                    else
+                    {
+                        Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Record Deleted from the manage Listing");
+                        
+                    }
 
                 }
-
-                else
-                {
-                    Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Record Deleted from the manage Listing");
-                    break;
-                }
-
             }
+            //No more records in the Manage Listing
+            else
+                Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "You do not have any service listings!");
+
+
         }
     }
 }

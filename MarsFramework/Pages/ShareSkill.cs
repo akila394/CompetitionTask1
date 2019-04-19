@@ -324,7 +324,7 @@ namespace MarsFramework.Pages
                 foreach(IWebElement row in RowElements)
                 {
                     IList<IWebElement> col = row.FindElements(By.TagName("td"));
-                    if (col[3].Text.Equals(GlobalDefinitions.ExcelLib.ReadData(2, "Title")))
+                    if (col[2].Text.Equals(GlobalDefinitions.ExcelLib.ReadData(2, "Title")))
                     {
                         
                         Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Newly added skill service is listed in Manage Listings");
