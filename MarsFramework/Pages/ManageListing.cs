@@ -91,18 +91,31 @@ namespace MarsFramework.Pages
             Thread.Sleep(2000);
 
             IList<IWebElement> RowElements = RecordDetails.FindElements(By.TagName("tr"));
-            int records = RowElements.Count;
+            Console.WriteLine(RowElements.Count);
+           
+            IList<IWebElement> removeBtn = GlobalDefinitions.driver.FindElements(By.XPath("//table/tbody/tr/td/i[3]"));
+            int records = RowElements.Count; // number of records in the table
+            int deleteRecord=0;
+
             //Delete a Record
-            foreach (IWebElement row in RowElements)
+            for (int i= 0; i <= RowElements.Count; i++)
             {
-                IList<IWebElement> col = row.FindElements(By.TagName("td"));
-                if (col[2].Text.Equals(Global.GlobalDefinitions.ExcelLib.ReadData(2, "Delete record")))
+                
+                IList<IWebElement> col = RowElements[i].FindElements(By.TagName("td"));
+                Console.WriteLine(col.Count);
+                
+                if (col[2].Text == Global.GlobalDefinitions.ExcelLib.ReadData(2, "Delete record"))
                 {
-                    RemoveIcon.Click();
-                    Thread.Sleep(5000);
+                    //RemoveIcon.Click();
+                    Console.WriteLine(RowElements[i].Text);
+                    removeBtn[i].Click();
+                    Thread.Sleep(3000);
                     DeleteConfirmbtn.Click();
                     Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Service deleted");
-                    //records = records - 1;
+                    records = records - 1;
+                    deleteRecord = i;
+                    break;
+                    
                 }
             }
 
@@ -110,22 +123,21 @@ namespace MarsFramework.Pages
             if (records >= 1)
             {
 
-                foreach (IWebElement row in RowElements)
+                Console.WriteLine(deleteRecord);
+                Console.WriteLine(RowElements[deleteRecord].Text);
+                Thread.Sleep(2000);   
+                    IList<IWebElement> col = RowElements[deleteRecord].FindElements(By.TagName("td"));
+                if (col[2].Text == GlobalDefinitions.ExcelLib.ReadData(2, "Delete record"))
                 {
-                    IList<IWebElement> col = row.FindElements(By.TagName("td"));
-                    if (col[3].Text.Equals(GlobalDefinitions.ExcelLib.ReadData(2, "Title")))
-                    {
 
-                        Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Deleted record still in the Manage Listings");
-                        
+                    Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Deleted record still in the Manage Listings");
 
-                    }
 
-                    else
-                    {
-                        Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Record Deleted from the manage Listing");
-                        
-                    }
+                }
+
+                else
+                {
+                    Global.Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Pass, "Record Deleted from the manage Listing");
 
                 }
             }
