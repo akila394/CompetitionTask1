@@ -126,7 +126,7 @@ namespace MarsFramework.Pages
                 Console.WriteLine(deleteRecord);
                 Console.WriteLine(RowElements[deleteRecord].Text);
                 Thread.Sleep(2000);   
-                    IList<IWebElement> col = RowElements[deleteRecord].FindElements(By.TagName("td"));
+                IList<IWebElement> col = RowElements[deleteRecord].FindElements(By.TagName("td"));
                 if (col[2].Text == GlobalDefinitions.ExcelLib.ReadData(2, "Delete record"))
                 {
 
